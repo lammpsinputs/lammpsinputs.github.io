@@ -26,4 +26,4 @@ view:
 	
 github:
 	@make html
-	@cp -a build/html/. .
+	@cp -a build/html/. docs/

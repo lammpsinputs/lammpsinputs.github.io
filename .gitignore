@@ -2,9 +2,11 @@
 **/*xtc_offsets.npz
 **/*xtc_offsets.lock
 
-# pycharm virtual environment stuff:
-venv
-.idea
+# LAMMPS stuff
+**/*.lammpstrj
+**/*.xtc
+**/log.*
+**/*.dat
 
 # python stuff:
 __pycache__
@@ -15,16 +17,4 @@ __pycache__
 **/.ipynb_checkpoints/
 
 # sphinx stuff:
-docs/build
-
-# own stuff
-cheat.txt
-logo/
-nmrformd.egg-info/
-dist/
 build/
-
-.tox/
-docs/bin/
-docs/lib/
-docs/pyvenv.cfg

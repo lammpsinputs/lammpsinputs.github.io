@@ -1,1 +1,0 @@
-# lammpsinputs.github.io

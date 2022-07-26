@@ -50,6 +50,8 @@ thermo 500
 thermo_style custom step temp pe ke press
 run 5000
 
+stop
+
 unfix myat1
 unfix myat2
 unfix mynve
@@ -103,8 +105,7 @@ variable atm2Pa equal 101325
 variable N2mN equal 1e3
 variable myst equal 0.5*${mylz}*(v_myzPress-0.5*(v_myxPress+v_myyPress))*${A2m}*${atm2Pa}*${N2mN}
 fix myat1 all ave/time 10 500 5000 v_myst file gamma-H2O-nvt3.dat
-#dump mydmp all atom 5000 nvt3.lammpstrj
-dump mydmp all atom 10 HR_nvt.lammpstrj
+dump mydmp all atom 5000 nvt3.lammpstrj
 
-thermo 1000
-run 1000
+thermo 5000
+run 100000

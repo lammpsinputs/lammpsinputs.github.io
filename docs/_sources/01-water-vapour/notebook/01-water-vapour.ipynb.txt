@@ -11,15 +11,31 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Here the surface tension of a vapour-liquid-vapour sytem is calculated using LAMMPS. The input file can be downloaded [here](../input/input.lammps), and has been prepared using the 23Jun2022 version of LAMMPS. The system looks like that:"
+    "Here the surface tension of a vapour-liquid-vapour sytem is calculated using LAMMPS. The input file can be downloaded [here](../input/input.lammps). It has been prepared using the 23Jun2022 version of LAMMPS. The system looks like that:"
    ]
   },
   {
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "![system](../input/movie_a/system.png)"
+    "![system](../input/images/system.png)"
    ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "First we anticipate that 4 processors will be used, and that the most sensitive way to cut the system is along the x and y dimensions:\n",
+    "```\n",
+    "processors 2 2 1\n",
+    "```\n",
+    "Always ensure that using more than one core is beneficial by running some short tests."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": []
   }
  ],
  "metadata": {

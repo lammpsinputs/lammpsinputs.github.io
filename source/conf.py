@@ -10,7 +10,7 @@ extensions = [
     'nbsphinx',
 ]
 
-html_theme = 'furo'
+# html_theme = 'furo'
 
 templates_path = ['_templates']
 

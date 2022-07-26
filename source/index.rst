@@ -6,12 +6,13 @@
 LAMMPS inputs
 =============
 
-LAMMPS inputs is the companion website of `LAMMPS tutorials
-<https://lammpstutorials.github.io/>`_. Its goal is to provide advanced LAMMPS input scripts
-with as many comments as possible. 
-
-The target audience is people with minimum LAMMPS knowledge. 
+LAMMPSinputs.github.io is the companion website of `LAMMPStutorials.github.io
+<https://lammpstutorials.github.io/>`_. Its goal is to illustrate the use of LAMMPS 
+for solving advanced simulation problem by providing an input script with 
+numerous comments.  
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   
+   01-water-vapour/notebook/01-water-vapour

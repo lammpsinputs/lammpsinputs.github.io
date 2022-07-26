@@ -49,6 +49,9 @@ timestep 0.1
 thermo 500
 thermo_style custom step temp pe ke press
 run 5000
+
+stop
+
 unfix myat1
 unfix myat2
 unfix mynve
@@ -74,6 +77,7 @@ fix myat4 all ave/time 10 100 1000 v_mypress file press-nvt2.dat
 timestep 2.0
 thermo 5000
 run 50000
+write_data equilibrium.data
 
 undump mydmp
 unfix myat1
@@ -92,7 +96,7 @@ fix myac3 Hyd ave/chunk 10 10000 100000 cc3 density/mass file density-Hyd-nvt3.d
 fix myac4 H2O ave/chunk 10 10000 100000 cc1 fx fy fz file force-H2O-nvt3.dat
 compute mydc1 H2O dipole/chunk cc1
 fix myat1 all ave/time 10 10000 100000 c_mydc1[*] file dipole-H2O-nvt3.dat mode vector
-variable mylz equal lx
+variable mylz equal lz
 variable myxPress equal c_thermo_press[1]
 variable myyPress equal c_thermo_press[2]
 variable myzPress equal c_thermo_press[3]
@@ -103,9 +107,5 @@ variable myst equal 0.5*${mylz}*(v_myzPress-0.5*(v_myxPress+v_myyPress))*${A2m}*
 fix myat1 all ave/time 10 500 5000 v_myst file gamma-H2O-nvt3.dat
 dump mydmp all atom 5000 nvt3.lammpstrj
 
-thermo 1000
+thermo 5000
 run 100000
-
-
-# add ions ?
-# add thermo_modify

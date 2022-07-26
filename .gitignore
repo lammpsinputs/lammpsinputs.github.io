@@ -6,7 +6,6 @@
 **/*.lammpstrj
 **/*.xtc
 **/log.*
-**/*.dat
 
 # python stuff:
 __pycache__

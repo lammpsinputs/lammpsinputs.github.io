@@ -1,0 +1,111 @@
+# lammps input file
+
+processors 2 2 1
+
+boundary p p p
+units real
+atom_style full
+bond_style harmonic
+angle_style harmonic
+pair_style lj/cut/tip4p/long 1 2 1 1 0.1546 12.0
+kspace_style pppm/tip4p 1.0e-5
+pair_modify shift yes mix arithmetic
+
+lattice sc 3.2
+region mybox block -4 4 -4 4 -12 12
+create_box 2 mybox &
+		bond/types 1 &
+		angle/types 1 &
+		extra/bond/per/atom 2 &
+		extra/angle/per/atom 1 &
+		extra/special/per/atom 2
+
+mass 1 15.9994
+mass 2 1.008
+pair_coeff 1 1 0.1852 3.1589
+pair_coeff 2 2 0 0
+bond_coeff 1 0 0.9572
+angle_coeff 1 0 104.52
+
+molecule h2omol H2OTip4p.txt
+region mylayer block -4 4 -4 4 -4 4
+create_atoms 0 region mylayer mol h2omol 454756
+group H2O type 1 2
+group Oxy type 1
+group Hyd type 2
+
+fix myshk all shake 1.0e-5 200 0 b 1 a 1
+fix mynve all nve
+fix myber all temp/berendsen 1 1 1
+fix myrct all recenter NULL NULL INIT
+
+dump mydmp all atom 50 nvt1.lammpstrj
+variable myetotal equal etotal
+variable myke equal ke
+fix myat1 all ave/time 1 10 10 v_myetotal file etotal-nvt1.dat
+fix myat2 all ave/time 1 10 10 v_myke file ke-nvt1.dat
+
+timestep 0.1
+thermo 500
+thermo_style custom step temp pe ke press
+run 5000
+
+stop
+
+unfix myat1
+unfix myat2
+unfix mynve
+unfix myber
+unfix myrct
+undump mydmp
+reset_timestep 0
+
+velocity all create 300 4928459 mom yes rot yes dist gaussian
+fix mynve all nve
+fix myber all temp/berendsen 300 300 100
+fix myrct all recenter NULL NULL INIT
+
+dump mydmp all atom 500 nvt2.lammpstrj
+
+fix myat1 all ave/time 10 100 1000 v_myetotal file etotal-nvt2.dat
+fix myat2 all ave/time 10 100 1000 v_myke file ke-nvt2.dat
+variable mytemp equal temp
+fix myat3 all ave/time 10 100 1000 v_mytemp file temp-nvt2.dat
+variable mypress equal press
+fix myat4 all ave/time 10 100 1000 v_mypress file press-nvt2.dat
+
+timestep 2.0
+thermo 5000
+run 50000
+write_data equilibrium.data
+
+undump mydmp
+unfix myat1
+unfix myat2
+unfix myat3
+unfix myat4
+
+reset_timestep 0
+
+compute cc1 H2O chunk/atom bin/1d z 0.0 0.5
+compute cc2 Oxy chunk/atom bin/1d z 0.0 0.5
+compute cc3 Hyd chunk/atom bin/1d z 0.0 0.5
+fix myac1 H2O ave/chunk 10 10000 100000 cc1 density/mass file density-H2O-nvt3.dat
+fix myac2 Oxy ave/chunk 10 10000 100000 cc2 density/mass file density-Oxy-nvt3.dat
+fix myac3 Hyd ave/chunk 10 10000 100000 cc3 density/mass file density-Hyd-nvt3.dat
+fix myac4 H2O ave/chunk 10 10000 100000 cc1 fx fy fz file force-H2O-nvt3.dat
+compute mydc1 H2O dipole/chunk cc1
+fix myat1 all ave/time 10 10000 100000 c_mydc1[*] file dipole-H2O-nvt3.dat mode vector
+variable mylz equal lz
+variable myxPress equal c_thermo_press[1]
+variable myyPress equal c_thermo_press[2]
+variable myzPress equal c_thermo_press[3]
+variable A2m equal 1e-10
+variable atm2Pa equal 101325
+variable N2mN equal 1e3
+variable myst equal 0.5*${mylz}*(v_myzPress-0.5*(v_myxPress+v_myyPress))*${A2m}*${atm2Pa}*${N2mN}
+fix myat1 all ave/time 10 500 5000 v_myst file gamma-H2O-nvt3.dat
+dump mydmp all atom 5000 nvt3.lammpstrj
+
+thermo 5000
+run 100000

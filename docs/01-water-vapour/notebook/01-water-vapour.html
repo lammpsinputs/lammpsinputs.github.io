@@ -35,11 +35,29 @@
 <h1>Water-vapour interface<a class="headerlink" href="#Water-vapour-interface" title="Permalink to this headline">¶</a></h1>
 <p>Here the surface tension of a vapour-liquid-vapour sytem is calculated using LAMMPS. The input file can be downloaded <a class="reference external" href="../input/input.lammps">here</a>. It has been prepared using the 23Jun2022 version of LAMMPS. The system looks like that:</p>
 <p><img alt="system" src="../../_images/system.png" /></p>
-<p>First we anticipate that 4 processors will be used, and that the most sensitive way to cut the system is along the x and y dimensions:</p>
+<p>We anticipate that 4 processors will be used, and that the most sensitive way to cut the system is along the x and y dimensions:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>processors 2 2 1
 </pre></div>
 </div>
-<p>Always ensure that using more than one core is beneficial by running some short tests.</p>
+<p>Always ensure that using more than one processor is advantageous in terms of computational time by running some short tests. For some small systems, using 1 processor is faster than uning 4.</p>
+<p>Use periodic boundary conditions (<code class="docutils literal notranslate"><span class="pre">p</span></code>) in all 3 directions of space, the system of units <code class="docutils literal notranslate"><span class="pre">real</span></code>, and the atom style <code class="docutils literal notranslate"><span class="pre">full</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>boundary p p p
+units real
+atom_style full
+</pre></div>
+</div>
+<p>Define style for bonds and angles:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>bond_style harmonic
+angle_style harmonic
+</pre></div>
+</div>
+<p>Those styles are irrelevants as we are using a rigid water model.</p>
+<p>Define a pair style and a long-range solver:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pair_style lj/cut/tip4p/long 1 2 1 1 0.1546 12.0
+kspace_style pppm/tip4p 1.0e-5
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">lj/cut/tip4p/long</span></code> is similar to <code class="docutils literal notranslate"><span class="pre">lj/cut/coul/long</span></code> (Lennard-Jones interaction with a cut-off, and long range Coulomb interaction), but it has been made specifically to take care of the virtual site of the water molecule. For TIP4P/<span class="math notranslate nohighlight">\(\epsilon\)</span> water model, the OM distance is <span class="math notranslate nohighlight">\(0.1546\,\textrm{\AA}\)</span>.</p>
 </div>
 
 

@@ -8,6 +8,7 @@ release = '0.0.1'
 
 extensions = [
     'nbsphinx',
+    'sphinx.ext.mathjax',
 ]
 
 # html_theme = 'furo'
